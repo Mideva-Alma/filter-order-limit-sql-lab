@@ -61,6 +61,9 @@ WHERE hungry = 1
 ORDER BY age ASC;
 """, conn2)
 
+df_hungry["name"] = df_hungry["name"].astype("object")
+df_hungry.loc[df_hungry["name"].isna(), "name"] = None
+
 # STEP 7
 df_hungry_ages = pd.read_sql("""
 SELECT name, age, hungry
@@ -73,13 +76,9 @@ ORDER BY name ASC;
 # STEP 8
 df_4_oldest = pd.read_sql("""
 SELECT name, age, breed
-FROM (
-    SELECT name, age, breed
-    FROM dogs
-    ORDER BY age DESC
-    LIMIT 4
-)
-ORDER BY breed ASC;
+FROM dogs
+ORDER BY age DESC
+LIMIT 4;
 """, conn2)
 
 
@@ -98,7 +97,7 @@ FROM babe_ruth_stats;
 
 # STEP 10
 df_hr_total = pd.read_sql("""
-SELECT SUM(home_runs) AS total_home_runs
+SELECT SUM(HR) AS total_home_runs
 FROM babe_ruth_stats;
 """, conn3)
 
